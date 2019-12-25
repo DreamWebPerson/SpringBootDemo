@@ -25,21 +25,10 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public Integer insertUser(List<User> userList) {
-        Integer returnCount = 0;
-
-        try{
             for(int i=0;i<userList.size();i++){
-                if(i==1){
-                    int a = 100/0;
-                }
                 userMapper.insertUser(userList.get(i));
-                returnCount++;
+                int a = 100/0;
             }
-        }catch (Exception e){
-            e.printStackTrace();
-            returnCount = 0;
-        }finally {
-            return returnCount;
-        }
+        return 0;
     }
 }

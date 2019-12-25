@@ -3,20 +3,20 @@ package com.example.demo.user1.Controller;
 import com.example.demo.user1.Entity.User;
 import com.example.demo.user1.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import javax.annotation.Resource;
+import java.sql.*;
 import java.util.List;
 
 @RestController
 @RequestMapping("user")
 public class UserController {
 
-    //@Autowired
-    //UserService userService;
+    @Autowired
+    UserService userService;
 
     /***********************************************************
     * @dec:
@@ -72,7 +72,7 @@ public class UserController {
     public List<User> queryUserByJDBC(){
         //准备连接mysql基础信息
         String url = "jdbc:mysql://127.0.0.1:3306/mysql";
-        String driver = "com.mysql.jdbc.Driver";
+        String driver = "com.mysql.cj.jdbc.Driver";
         String userName = "root";
         String password = "123456";
 
@@ -124,12 +124,43 @@ public class UserController {
     }
 
 
+    @Resource
+    JdbcTemplate jdbcTemplate;
+
+    /***********************************************************
+    * @dec:
+    *  JDBC连接数据库完成对象查询
+    * @param: []
+    * @return: java.util.List<com.example.demo.user1.Entity.User>
+    * @author: chenGuang ma
+    * @createDate: 2019/12/25 11:17
+    ************************************************************/
+    @RequestMapping("SpringBootQueryUserByJDBC")
+    public List<User> SpringBootQueryUserByJDBC(){
+        String sql ="select * from demo.demo_user";
+            List<User> userList = jdbcTemplate.query(sql, new RowMapper<User>() {
+                @Override
+                public User mapRow(ResultSet resultSet, int i) throws SQLException {
+                    User user = new User();
+                    user.setName(resultSet.getString("USER_NAME"));
+                    user.setId(resultSet.getString("USER_ID"));
+                    user.setPassword(resultSet.getString("USER_PASSWORD"));
+                    user.setGenner(resultSet.getString("USER_GENDER"));
+                    return user;
+                }
+            });
+            for(User user:userList){
+                System.out.println(user);
+            }
+        return userList;
+    }
 
 
 
-//    @RequestMapping("queryUserBySql")
-//    public List<User> queryUserBySql(){
-//       //return userService.queryUser();
-//    }
+
+    @RequestMapping("queryUserBySql")
+    public List<User> queryUserBySql(){
+       return userService.queryUser();
+    }
 
 }

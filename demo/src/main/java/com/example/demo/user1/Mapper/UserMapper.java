@@ -9,5 +9,5 @@ public interface UserMapper {
     /**
      * 查询所有的用户信息
      * */
-    List<User> queryUser();
+    List<User> queryAllUser();
 }

@@ -13,4 +13,8 @@
     <select id="queryAllUser" resultMap="userMap">
         select * from demo.demo_user
     </select>
+
+    <insert id="insertUser" parameterType="com.example.demo.user1.Entity.User">
+        insert into demo.demo_user values(#{id},#{name},#{genner},#{password})
+    </insert>
 </mapper>

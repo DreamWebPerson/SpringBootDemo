@@ -1,13 +1,16 @@
 package com.example.demo.user1.Controller;
 
+import com.example.demo.user1.Entity.ListUser;
 import com.example.demo.user1.Entity.User;
 import com.example.demo.user1.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.sql.*;
 import java.util.List;
 
@@ -47,7 +50,7 @@ public class UserController {
      * @RequestHeader 接收请求头
      * @CookieValue 接收COOKIE值
      * HttpServletRequest 接收所有request信息
-     * 实体类，接收实体类属性
+     * @RequestBody 实体类，接收实体类属性
     * @param: [id]
     * @return: com.example.demo.user1.Entity.User
     * @author: chenGuang ma
@@ -155,12 +158,23 @@ public class UserController {
         return userList;
     }
 
-
-
-
+    /***********************************************************
+    * @dec:
+    *  通过mybatis直接读取mysql数据
+    * @param: []
+    * @return: java.util.List<com.example.demo.user1.Entity.User>
+    * @author: chenGuang ma
+    * @createDate: 2019/12/25 16:36
+    ************************************************************/
     @RequestMapping("queryUserBySql")
     public List<User> queryUserBySql(){
        return userService.queryUser();
+    }
+
+    @RequestMapping("insertUser")
+    public Integer insertUser(@RequestBody ListUser userList){
+
+       return userService.insertUser(userList.getUserList());
     }
 
 }

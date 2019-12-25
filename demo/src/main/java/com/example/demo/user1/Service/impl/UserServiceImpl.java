@@ -5,8 +5,11 @@ import com.example.demo.user1.Mapper.UserMapper;
 import com.example.demo.user1.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
+
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -17,5 +20,26 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> queryUser() {
         return userMapper.queryAllUser();
+    }
+
+    @Transactional
+    @Override
+    public Integer insertUser(List<User> userList) {
+        Integer returnCount = 0;
+
+        try{
+            for(int i=0;i<userList.size();i++){
+                if(i==1){
+                    int a = 100/0;
+                }
+                userMapper.insertUser(userList.get(i));
+                returnCount++;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            returnCount = 0;
+        }finally {
+            return returnCount;
+        }
     }
 }
